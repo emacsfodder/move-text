@@ -7,7 +7,7 @@
 ;; Copyright (C) 2009, Andy Stewart, all rights reserved.
 ;; Keywords: edit
 ;; Compatibility: GNU Emacs 23.0.60.1
-;; Version: 1.0
+;; Version: 1.0.1
 ;;
 ;;; This file is NOT part of GNU Emacs
 

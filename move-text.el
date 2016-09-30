@@ -137,6 +137,6 @@
   (global-set-key [M-down] 'move-text-down)
   (global-set-key [M-up] 'move-text-up))
 
-;;; move-text.el ends here
-
 (provide 'move-text)
+
+;;; move-text.el ends here

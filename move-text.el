@@ -1,13 +1,12 @@
 ;;; move-text.el --- Move current line or region with M-up or M-down.
 
-;; Filename: move-text.el
+;; filename: move-text.el
 ;; Description: Move current line or region with M-up or M-down.
 ;; Author: Jason M <jasonm23@gmail.com>
-;; Extracted from basic-toolkit.el by Andy Stewart.
-;; Copyright (C) 2009, Andy Stewart, all rights reserved.
 ;; Keywords: edit
-;; Compatibility: GNU Emacs 23.0.60.1
-;; Version: 1.0.1
+;; Url: https://github.com/emacsfodder/move-text
+;; Compatibility: GNU Emacs 25.1
+;; Version: 2.0.0
 ;;
 ;;; This file is NOT part of GNU Emacs
 
@@ -30,9 +29,10 @@
 
 ;;; Commentary:
 ;;
-;; MoveText is extracted from Basic edit toolkit.
-;; It allows you to move the current line using M-up / M-down
-;; if a region is marked, it will move the region instead.
+;; MoveText 2.0.0 is a re-write of the old move-text and compatible with >= Emacs 25.1
+;;
+;; It allows you to move the current line using M-up / M-down if a
+;; region is marked, it will move the region instead.
 ;;
 
 ;;; Installation:
@@ -46,63 +46,97 @@
 ;;
 ;; (require 'move-text)
 ;; (move-text-default-bindings)
-;;
 
 ;;; Acknowledgements:
 ;;
-;;  Feature extracted from basic-edit-toolkit.el - by Andy Stewart (LazyCat)
+;;  Original v1.x was a Feature extracted from basic-edit-toolkit.el - by Andy Stewart (LazyCat)
 ;;
 
 ;;; Code:
 
-(defun move-text-internal (arg)
-  (cond
-   ((and mark-active transient-mark-mode)
-    (if (> (point) (mark))
-        (exchange-point-and-mark))
-    (let ((column (current-column))
-          (text (delete-and-extract-region (point) (mark))))
-      (forward-line arg)
-      (move-to-column column t)
-      (set-mark (point))
-      (insert text)
-      (exchange-point-and-mark)
-      (setq deactivate-mark nil)))
-   (t
-    (let ((column (current-column)))
-      (beginning-of-line)
-      (when (or (> arg 0) (not (bobp)))
-        (forward-line)
-        (when (or (< arg 0) (not (eobp)))
-          (transpose-lines arg)
-          ;; Account for changes to transpose-lines in Emacs 24.3
-          (when (and (eval-when-compile
-                       (not (version-list-<
-                             (version-to-list emacs-version)
-                             '(24 3 50 0))))
-                     (< arg 0))
-            (forward-line -1)))
-        (forward-line -1))
-      (move-to-column column t)))))
+;;;###autoload
+(defun move-text-at-last-line-p ()
+  "Predicate, point at the last line?"
+  (equal (count-lines (point-min) (point)) (count-lines (point-min) (point-max))))
+
+(defun move-text-at-first-line-p ()
+  "Predicate, point at the first line?"
+  (pcase (count-lines (point-min) (+ (point) 1)) ((or 0 1) t)))
 
 ;;;###autoload
-(defun move-text-down (arg)
-  "Move region (transient-mark-mode active) or current line ARG lines down."
-  (interactive "*p")
-  (move-text-internal arg))
+(defun move-line-up ()
+  "Move the current line up."
+  (interactive)
+  (if (move-text-at-last-line-p)
+      (let ((target-point))
+        (message "At last line")
+        (kill-whole-line)
+        (forward-line -1)
+        (beginning-of-line)
+        (setq target-point (point))
+        (yank)
+        (unless (looking-at "\n")
+          (newline))
+        (goto-char target-point))
+    (progn (transpose-lines 1)
+           (forward-line -2))))
 
 ;;;###autoload
-(defun move-text-up (arg)
-  "Move region (transient-mark-mode active) or current line ARG lines up."
-  (interactive "*p")
-  (move-text-internal (- arg)))
+(defun move-line-down ()
+  "Move the current line down."
+  (interactive)
+  (forward-line 1)
+  (transpose-lines 1)
+  (forward-line -1))
+
+;;;###autoload
+(defun move-region (start end n)
+  "Move the current region (START END) up or down by N lines."
+  (interactive "r\np")
+  (let ((line-text (delete-and-extract-region start end)))
+    (forward-line n)
+    (let ((start (point)))
+      (insert line-text)
+      (setq deactivate-mark nil)
+      (set-mark start))))
+
+;;;###autoload
+(defun move-region-up (start end n)
+  "Move the current region (START END) up by N lines."
+  (interactive "r\np")
+  (move-region start end (if (null n) -1 (- n))))
+
+;;;###autoload
+(defun move-region-down (start end n)
+  "Move the current region (START END) down by N lines."
+  (interactive "r\np")
+  (move-region start end (if (null n) 1 n)))
+
+;;;###autoload
+(defun move-text-up (&optional start end n)
+  "Move the line or region (START END) up by N lines."
+  (interactive "r\np")
+  (if (not (move-text-at-first-line-p))
+    (if (region-active-p)
+        (move-region-up start end n)
+      (move-line-up))))
+
+;;;###autoload
+(defun move-text-down (&optional start end n)
+  "Move the line or region (START END) down by N lines."
+  (interactive "r\np")
+  (if (region-active-p)
+      (move-region-down start end n)
+    (move-line-down)))
 
 ;;;###autoload
 (defun move-text-default-bindings ()
+  "Use default bindings for move-text-up and move-text-down (M-up / M-down)."
+  (interactive)
   "Bind `move-text-up' and `move-text-down' to M-up and M-down."
-  (global-set-key [M-up] 'move-text-up)
-  (global-set-key [M-down] 'move-text-down))
-
-(provide 'move-text)
+  (global-set-key [M-down] 'move-text-down)
+  (global-set-key [M-up] 'move-text-up))
 
 ;;; move-text.el ends here
+
+(provide 'move-text)

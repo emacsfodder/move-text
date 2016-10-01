@@ -6,7 +6,7 @@
 ;; Keywords: edit
 ;; Url: https://github.com/emacsfodder/move-text
 ;; Compatibility: GNU Emacs 25.1
-;; Version: 2.0.3
+;; Version: 2.0.4
 ;;
 ;;; This file is NOT part of GNU Emacs
 
@@ -62,12 +62,12 @@
 ;;;###autoload
 (defun move-text--at-first-line-p ()
   "Predicate, is the point at the first line?"
-  (<= (line-number-at-pos) (point-min)))
+  (= (line-number-at-pos) 1))
 
 ;;;###autoload
 (defun move-text--at-penultimate-line-p ()
   "Predicate, is the point at the penultimate line?"
-  (>= (line-number-at-pos) (1- (move-text--total-lines))))
+  (= (line-number-at-pos) (1- (move-text--total-lines))))
 
 ;;;###autoload
 (defun move-text--last-line-is-just-newline ()
@@ -80,7 +80,7 @@
 ;;;###autoload
 (defun move-text--at-last-line-p ()
   "Predicate, is the point at the last line?"
-  (>= (line-number-at-pos) (move-text--total-lines)))
+  (= (line-number-at-pos) (move-text--total-lines)))
 
 ;;;###autoload
 (defun move-text-line-up ()

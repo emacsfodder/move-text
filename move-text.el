@@ -57,12 +57,12 @@
 ;;;###autoload
 (defun move-text--total-lines ()
   "Convenience function to get the total lines in the buffer / or narrowed buffer."
-   (count-lines (point-min) (point-max)))
+  (line-number-at-pos (point-max)))
 
 ;;;###autoload
 (defun move-text--at-first-line-p ()
   "Predicate, is the point at the first line?"
-  (<= (line-number-at-pos) 1))
+  (<= (line-number-at-pos) (point-min)))
 
 ;;;###autoload
 (defun move-text--at-penultimate-line-p ()
@@ -83,7 +83,7 @@
   (>= (line-number-at-pos) (move-text--total-lines)))
 
 ;;;###autoload
-(defun move-line-up ()
+(defun move-text-line-up ()
   "Move the current line up."
   (interactive)
   (if (move-text--at-last-line-p)
@@ -100,7 +100,7 @@
            (forward-line -2))))
 
 ;;;###autoload
-(defun move-line-down ()
+(defun move-text-line-down ()
   "Move the current line down."
   (interactive)
   (unless (or
@@ -113,7 +113,7 @@
     (forward-line -1)))
 
 ;;;###autoload
-(defun move-region (start end n)
+(defun move-text-region (start end n)
   "Move the current region (START END) up or down by N lines."
   (interactive "r\np")
   (let ((line-text (delete-and-extract-region start end)))
@@ -124,16 +124,15 @@
       (set-mark start))))
 
 ;;;###autoload
-(defun move-region-up (start end n)
+(defun move-text-region-up (start end n)
   "Move the current region (START END) up by N lines."
   (interactive "r\np")
-  (move-region start end (if (null n) -1 (- n))))
-
+  (move-text-region start end (if (null n) -1 (- n))))
 ;;;###autoload
-(defun move-region-down (start end n)
+(defun move-text-region-down (start end n)
   "Move the current region (START END) down by N lines."
   (interactive "r\np")
-  (move-region start end (if (null n) 1 n)))
+  (move-text-region start end (if (null n) 1 n)))
 
 ;;;###autoload
 (defun move-text-up (&optional start end n)
@@ -141,24 +140,24 @@
   (interactive "r\np")
   (if (not (move-text--at-first-line-p))
     (if (region-active-p)
-        (move-region-up start end n)
-      (move-line-up))))
+        (move-text-region-up start end n)
+      (move-text-line-up))))
 
 ;;;###autoload
 (defun move-text-down (&optional start end n)
   "Move the line or region (START END) down by N lines."
   (interactive "r\np")
   (if (region-active-p)
-      (move-region-down start end n)
-    (move-line-down)))
+      (move-text-region-down start end n)
+    (move-text-line-down)))
 
 ;;;###autoload
 (defun move-text-default-bindings ()
   "Use default bindings for move-text-up and move-text-down (M-up / M-down)."
   (interactive)
-  "Bind `move-text-up' and `move-text-down' to M-up and M-down."
+  "Bind `move-text-up' and `move-text-down' to M-up & M-down."
   (global-set-key [M-down] 'move-text-down)
-  (global-set-key [M-up] 'move-text-up))
+  (global-set-key [M-up]   'move-text-up))
 
 (provide 'move-text)
 

@@ -54,22 +54,33 @@
 
 ;;; Code:
 
-
-
 ;;;###autoload
 (defun move-text--total-lines ()
   "Convenience function to get the total lines in the buffer / or narrowed buffer."
    (count-lines (point-min) (point-max)))
 
 ;;;###autoload
-(defun move-text--at-last-line-p ()
-  "Predicate, is the point at the last lne?"
-  (>= (line-number-at-pos) (move-text--total-lines)))
-
-;;;###autoload
 (defun move-text--at-first-line-p ()
   "Predicate, is the point at the first line?"
   (<= (line-number-at-pos) 1))
+
+;;;###autoload
+(defun move-text--at-penultimate-line-p ()
+  "Predicate, is the point at the penultimate line?"
+  (>= (line-number-at-pos) (1- (move-text--total-lines))))
+
+;;;###autoload
+(defun move-text--last-line-is-just-newline ()
+  "Predicate, is last line just a newline?"
+  (save-mark-and-excursion
+   (goto-char (point-max))
+   (beginning-of-line)
+   (= (point-max) (point))))
+
+;;;###autoload
+(defun move-text--at-last-line-p ()
+  "Predicate, is the point at the last line?"
+  (>= (line-number-at-pos) (move-text--total-lines)))
 
 ;;;###autoload
 (defun move-line-up ()
@@ -92,7 +103,11 @@
 (defun move-line-down ()
   "Move the current line down."
   (interactive)
-  (unless (move-text--at-last-line-p)
+  (unless (or
+           (move-text--at-last-line-p)
+           (and
+            (move-text--last-line-is-just-newline)
+            (move-text--at-penultimate-line-p)))
     (forward-line 1)
     (transpose-lines 1)
     (forward-line -1)))

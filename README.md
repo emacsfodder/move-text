@@ -1,3 +1,5 @@
+[![Melpa Status](http://melpa.milkbox.net/packages/move-text-badge.svg)](http://melpa.milkbox.net/#/move-text) [![Melpa Stable Status](http:///melpa-stable.milkbox.net/packages/move-text-badge.svg)](http://melpa-stable.milkbox.net/#/move-text)
+
 # move-text
 
 MoveText is extracted from Basic edit toolkit.

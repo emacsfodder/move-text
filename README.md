@@ -1,7 +1,7 @@
 [![Melpa Status](http://melpa.milkbox.net/packages/move-text-badge.svg)](http://melpa.milkbox.net/#/move-text)
 [![Melpa Stable Status](http://melpa-stable.milkbox.net/packages/move-text-badge.svg)](http://melpa-stable.milkbox.net/#/move-text)
 
-# MoveText
+# MoveText (2.0.5)
 
 MoveText is extracted from Basic edit toolkit.
 It allows you to move the current line using M-up / M-down (or any other bindings you choose)

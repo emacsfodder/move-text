@@ -6,7 +6,7 @@
 ;; Keywords: edit
 ;; Url: https://github.com/emacsfodder/move-text
 ;; Compatibility: GNU Emacs 25.1
-;; Version: 2.0.4
+;; Version: 2.0.5
 ;;
 ;;; This file is NOT part of GNU Emacs
 
@@ -53,6 +53,21 @@
 ;;
 
 ;;; Code:
+
+(defun move-text-get-region-and-prefix ()
+    "Get the region and prefix for the `interactive' macro, without aborting.
+
+Note: `region-beginning' and `region-end' are the reason why an
+`interactive' macro with \"r\" will blow up with the error:
+
+\"The mark is not set now, so there is no region\"
+
+So the predicate `region-active-p' is needed to avoid calling
+them when there's no region."
+    `(,@(if (region-active-p)
+            (list (region-beginning) (region-end))
+          (list nil nil))
+      ,current-prefix-arg))
 
 ;;;###autoload
 (defun move-text--total-lines ()
@@ -115,7 +130,7 @@
 ;;;###autoload
 (defun move-text-region (start end n)
   "Move the current region (START END) up or down by N lines."
-  (interactive "r\np")
+  (interactive (move-text-get-region-and-prefix))
   (let ((line-text (delete-and-extract-region start end)))
     (forward-line n)
     (let ((start (point)))
@@ -126,18 +141,18 @@
 ;;;###autoload
 (defun move-text-region-up (start end n)
   "Move the current region (START END) up by N lines."
-  (interactive "r\np")
+  (interactive (move-text-get-region-and-prefix))
   (move-text-region start end (if (null n) -1 (- n))))
 ;;;###autoload
 (defun move-text-region-down (start end n)
   "Move the current region (START END) down by N lines."
-  (interactive "r\np")
+  (interactive (move-text-get-region-and-prefix))
   (move-text-region start end (if (null n) 1 n)))
 
 ;;;###autoload
 (defun move-text-up (&optional start end n)
   "Move the line or region (START END) up by N lines."
-  (interactive "r\np")
+  (interactive (move-text-get-region-and-prefix))
   (if (not (move-text--at-first-line-p))
     (if (region-active-p)
         (move-text-region-up start end n)
@@ -146,7 +161,7 @@
 ;;;###autoload
 (defun move-text-down (&optional start end n)
   "Move the line or region (START END) down by N lines."
-  (interactive "r\np")
+  (interactive (move-text-get-region-and-prefix))
   (if (region-active-p)
       (move-text-region-down start end n)
     (move-text-line-down)))

@@ -6,7 +6,7 @@
 ;; Keywords: edit
 ;; Url: https://github.com/emacsfodder/move-text
 ;; Compatibility: GNU Emacs 25.1
-;; Version: 2.0.7
+;; Version: 2.0.8
 ;;
 ;;; This file is NOT part of GNU Emacs
 
@@ -33,6 +33,9 @@
 ;;
 ;; It allows you to move the current line using M-up / M-down if a
 ;; region is marked, it will move the region instead.
+;;
+;; Using the prefix (C-u *number* or META *number*) you can predefine how
+;; many lines move-text will travel.
 ;;
 
 ;;; Installation:
@@ -153,6 +156,7 @@ them when there's no region."
   "Move the current region (START END) up by N lines."
   (interactive (move-text-get-region-and-prefix))
   (move-text-region start end (if (null n) -1 (- n))))
+
 ;;;###autoload
 (defun move-text-region-down (start end n)
   "Move the current region (START END) down by N lines."
@@ -166,7 +170,8 @@ them when there's no region."
   (if (not (move-text--at-first-line-p))
     (if (region-active-p)
         (move-text-region-up start end n)
-      (move-text-line-up))))
+      (if n (cl-loop repeat n do (move-text-line-up))
+        (move-text-line-up)))))
 
 ;;;###autoload
 (defun move-text-down (&optional start end n)
@@ -174,7 +179,8 @@ them when there's no region."
   (interactive (move-text-get-region-and-prefix))
   (if (region-active-p)
       (move-text-region-down start end n)
-    (move-text-line-down)))
+    (if n (cl-loop repeat n do (move-text-line-down))
+      (move-text-line-down))))
 
 ;;;###autoload
 (defun move-text-default-bindings ()

@@ -1,11 +1,13 @@
 [![Melpa Status](http://melpa.milkbox.net/packages/move-text-badge.svg)](http://melpa.milkbox.net/#/move-text)
 [![Melpa Stable Status](http://melpa-stable.milkbox.net/packages/move-text-badge.svg)](http://melpa-stable.milkbox.net/#/move-text)
 
-# MoveText (2.0.5)
+# MoveText (2.0.8)
 
 MoveText is extracted from Basic edit toolkit.
 It allows you to move the current line using M-up / M-down (or any other bindings you choose)
 if a region is marked, it will move the region instead.
+
+Using the prefix arg (C-u *number* or META *number*) will predetermine how many lines to move.
 
 Install from MELPA (or MELPA stable)
 

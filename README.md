@@ -1,5 +1,5 @@
-[![Melpa Status](http://melpa.milkbox.net/packages/move-text-badge.svg)](http://melpa.milkbox.net/#/move-text)
-[![Melpa Stable Status](http://melpa-stable.milkbox.net/packages/move-text-badge.svg)](http://melpa-stable.milkbox.net/#/move-text)
+[![MELPA](https://melpa.org/packages/move-text-badge.svg)](https://melpa.org/#/move-text)
+[![MELPA Stable](https://stable.melpa.org/packages/move-text-badge.svg)](https://stable.melpa.org/#/move-text)
 
 # MoveText (2.0.8)
 

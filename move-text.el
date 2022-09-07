@@ -158,13 +158,13 @@ them when there's no region."
 ;;;###autoload
 (defun move-text-region-up (start end n)
   "Move the current region (START END) up by N lines."
-  (interactive (move-text-get-region-and-prefix))
+  ;; (interactive (move-text-get-region-and-prefix))
   (move-text-region start end -n))
 
 ;;;###autoload
 (defun move-text-region-down (start end n)
   "Move the current region (START END) down by N lines."
-  (interactive (move-text-get-region-and-prefix))
+  ;; (interactive (move-text-get-region-and-prefix))
   (move-text-region start end n))
 
 ;;;###autoload

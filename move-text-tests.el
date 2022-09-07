@@ -7,20 +7,20 @@
 (require 'move-text)
 (require 'ert)
 
-(defmacro should-temp-buffer (input-string expect-string &rest body)
+(defmacro should-on-temp-buffer (input-string expect-string &rest body)
   "INPUT-STRING processed by BODY forms in a temp buffer should equal EXPECT-STRING."
   (declare (indent 1) (debug t))
-  `(should (string= ,expect
-                           (with-current-buffer-window "*ERT-should-temp-buffer*"
-                               (erase-buffer)
-                               (insert ,input)
-                             (goto-char (point-min))
-                             ,@body
-                             (buffer-string)))))
+  `(should (string= ,expect-string
+                    (with-temp-buffer
+                      ;; (erase-buffer)
+                      (insert ,input-string)
+                      (goto-char (point-min))
+                      ,@body
+                      (buffer-string)))))
 
 (let ((transient-mark-mode t))
 
-  (ert-deftest move-text-down ()
+  (ert-deftest move-text-down-test ()
     "Move text down by (1) one line, (2) by region."
     (should-on-temp-buffer
         "This is a test
@@ -32,7 +32,8 @@ This is a test
 Line 3
 "
       (goto-char 0)
-      (move-text-down))
+      ;; (move-text-down 1 nil nil))
+      (move-text-line-down))
 
     (should-on-temp-buffer
         "This is a test
@@ -49,12 +50,23 @@ Line 3
 Line 5
 Line 6
 "
-      (set-mark 16)
-      (goto-char 27)
-      (activate-mark)
-      (move-text-down)))
+      ;; (set-mark 16)
+      ;; (goto-char 27)
+      ;; (activate-mark)
+        (let ((beg 16)
+              (end 27))
+          (goto-char 0)
+          (forward-line 3)
+          (setq beg (point))
+          (forward-line 1)
+          (setq end (point))
+          (move-text-region-down beg end 1)
+          (message (buffer-string)))
 
-  (ert-deftest move-text-up ()
+        )
+    )
+
+  (ert-deftest move-text-up-test ()
      "Move text up by (1) one line, (2) by region."
      (should-on-temp-buffer
        "This is a test

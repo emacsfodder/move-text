@@ -67,11 +67,15 @@ Note: `region-beginning' and `region-end' are the reason why an
 
 So the predicate `region-active-p' is needed to avoid calling
 them when there's no region."
-    `(,@(if (region-active-p)
-            (list (region-beginning) (region-end))
-          (list nil nil))
-      ,current-prefix-arg))
-
+    ;; `(,@(if (region-active-p)
+    ;;         (list (region-beginning) (region-end))
+    ;;       (list nil nil))
+    ;;   ,current-prefix-arg))
+    (list
+     (if mark-active (region-beginning) nil)
+     (if mark-active (region-end) nil)
+     (prefix-numeric-value current-prefix-arg)
+     ))
 ;;;###autoload
 (defun move-text--total-lines ()
   "Convenience function to get the total lines in the buffer / or narrowed buffer."
@@ -164,7 +168,7 @@ them when there's no region."
   (move-text-region start end (if (null n) 1 n)))
 
 ;;;###autoload
-(defun move-text-up (&optional start end n)
+(defun move-text-up (start end n)
   "Move the line or region (START END) up by N lines."
   (interactive (move-text-get-region-and-prefix))
   (if (not (move-text--at-first-line-p))
@@ -174,7 +178,7 @@ them when there's no region."
         (move-text-line-up)))))
 
 ;;;###autoload
-(defun move-text-down (&optional start end n)
+(defun move-text-down (start end n)
   "Move the line or region (START END) down by N lines."
   (interactive (move-text-get-region-and-prefix))
   (if (region-active-p)

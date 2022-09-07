@@ -147,7 +147,7 @@ them when there's no region."
 ;;;###autoload
 (defun move-text-region (start end n)
   "Move the current region (START END) up or down by N lines."
-  (interactive (move-text-get-region-and-prefix))
+  ;; (interactive (move-text-get-region-and-prefix))
   (let ((line-text (delete-and-extract-region start end)))
     (forward-line n)
     (let ((start (point)))
@@ -159,13 +159,13 @@ them when there's no region."
 (defun move-text-region-up (start end n)
   "Move the current region (START END) up by N lines."
   (interactive (move-text-get-region-and-prefix))
-  (move-text-region start end (if (null n) -1 (- n))))
+  (move-text-region start end -n))
 
 ;;;###autoload
 (defun move-text-region-down (start end n)
   "Move the current region (START END) down by N lines."
   (interactive (move-text-get-region-and-prefix))
-  (move-text-region start end (if (null n) 1 n)))
+  (move-text-region start end n))
 
 ;;;###autoload
 (defun move-text-up (start end n)

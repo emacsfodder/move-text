@@ -29,3 +29,19 @@ This sets the keyboard shortcuts:
 ## Demonstration
 
 ![](move-text.gif)
+
+### Indent after moving...
+
+[@jbreeden](https://github.com/jbreeden) gave us this useful function advice to have Emacs re-indent the text in-and-around a text move.
+
+```lisp
+(defun indent-region-advice (&rest ignored)
+  (let ((deactivate deactivate-mark))
+    (if (region-active-p)
+        (indent-region (region-beginning) (region-end))
+      (indent-region (line-beginning-position) (line-end-position)))
+    (setq deactivate-mark deactivate)))
+
+(advice-add 'move-text-up :after 'indent-region-advice)
+(advice-add 'move-text-down :after 'indent-region-advice)
+```

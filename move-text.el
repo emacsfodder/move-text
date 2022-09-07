@@ -174,8 +174,7 @@ them when there's no region."
   (if (not (move-text--at-first-line-p))
     (if (region-active-p)
         (move-text-region-up start end n)
-      (if n (cl-loop repeat n do (move-text-line-up))
-        (move-text-line-up)))))
+      (cl-loop repeat n do (move-text-line-up)))))
 
 ;;;###autoload
 (defun move-text-down (start end n)
@@ -183,8 +182,7 @@ them when there's no region."
   (interactive (move-text-get-region-and-prefix))
   (if (region-active-p)
       (move-text-region-down start end n)
-    (if n (cl-loop repeat n do (move-text-line-down))
-      (move-text-line-down))))
+    (cl-loop repeat n do (move-text-line-down))))
 
 ;;;###autoload
 (defun move-text-default-bindings ()

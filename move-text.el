@@ -113,7 +113,7 @@ them when there's no region."
 ;;;###autoload
 (defun move-text-line-up ()
   "Move the current line up."
-  (interactive)
+  ;; (interactive)
     (if (move-text--at-last-line-p)
         (let ((target-point))
           (kill-whole-line)
@@ -132,7 +132,7 @@ them when there's no region."
 ;;;###autoload
 (defun move-text-line-down ()
   "Move the current line down."
-  (interactive)
+  ;; (interactive)
   (unless (or
            (move-text--at-last-line-p)
            (and

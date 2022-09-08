@@ -1,7 +1,7 @@
 [![MELPA](https://melpa.org/packages/move-text-badge.svg)](https://melpa.org/#/move-text)
 [![MELPA Stable](https://stable.melpa.org/packages/move-text-badge.svg)](https://stable.melpa.org/#/move-text)
 
-# MoveText (2.0.8)
+# MoveText (2.0.8) [![Move-Text CI Tests](https://github.com/emacsfodder/move-text/actions/workflows/test.yml/badge.svg)](https://github.com/emacsfodder/move-text/actions/workflows/test.yml)
 
 MoveText 
 allows you to move the current line using M-up / M-down (or any other bindings you choose)

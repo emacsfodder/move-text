@@ -72,8 +72,8 @@ We use `prefix-numeric-value' to always return a number and simplify the functio
     (list
      (when mark-active (region-beginning)) ;; otherwise nil
      (when mark-active (region-end))
-     (prefix-numeric-value current-prefix-arg)
-     ))
+     (prefix-numeric-value current-prefix-arg)))
+
 ;;;###autoload
 (defun move-text--total-lines ()
   "Convenience function to get the total lines in the buffer / or narrowed buffer."

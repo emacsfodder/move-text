@@ -12,8 +12,6 @@
   (declare (indent 1) (debug t))
   `(should (string= ,expect-string
                     (with-temp-buffer
-                    ;; (with-current-buffer-window "*ERT-should-temp-buffer*"
-                    ;;   (erase-buffer)
                       (insert ,input-string)
                       (goto-char (point-min))
                       ,@body
@@ -90,13 +88,9 @@ Line 6
 "
        (goto-char 0)
        (forward-line)
-       ;; (forward-char 2)
        (push-mark)
        (activate-mark)
        (forward-line 2)
-       ;; (end-of-line)
-       ;; (backward-char 2)
-       ;; (message "Test Region: string \"%s\"" (buffer-substring-no-properties (region-beginning) (region-end)))
        (move-text-up (mark) (point) 1))))
 
 ;;; move-text-tests.el ends here

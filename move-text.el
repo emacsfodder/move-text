@@ -184,9 +184,7 @@ We use `prefix-numeric-value' to always return a number and simplify the functio
 
 ;;;###autoload
 (defun move-text-default-bindings ()
-  "Use default bindings for move-text-up and move-text-down (M-up / M-down).
-
-Bind `move-text-up' and `move-text-down' to M-up & M-down."
+  "Use default bindings for move-text-up and move-text-down (M-up / M-down)."
   (interactive)
   (global-set-key [M-down] 'move-text-down)
   (global-set-key [M-up]   'move-text-up))

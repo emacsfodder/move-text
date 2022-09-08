@@ -76,7 +76,7 @@ Line 6
         )
     )
 
-  (ert-deftest move-text-up-test ()
+  (ert-deftest move-line-up-test ()
      "Move text up by (1) one line, (2) by region."
      (should-on-temp-buffer
        "This is a test

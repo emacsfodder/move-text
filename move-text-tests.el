@@ -32,7 +32,6 @@ Line 3
 This is a test
 Line 3
 "
-      (goto-char 0)
       (call-interactively #'move-text-down))
 
 ;;     (should-on-temp-buffer
@@ -78,33 +77,34 @@ Line 3
 Line 2
 "
      (goto-char 24)
-     (move-text-up))
+     (call-interactively #'move-text-up))
 
-     (should-on-temp-buffer
-         "This is a test
-Line 2
-Line 3
-Line 4
-Line 5
-Line 6
-"
-       "Line 2
-Line 3
-This is a test
-Line 4
-Line 5
-Line 6
-"
-       (goto-char 0)
-       (forward-line 2)
-       (forward-char 2)
-       (activate-mark)
-       (forward-line)
-       (end-of-line)
-       (backward-char 2)
-       (message "Test Region: string \"%s\"" (buffer-substring-no-properties (region-beginning) (region-end)))
-       (move-text-up))))
-
+;;      (should-on-temp-buffer
+;;          "This is a test
+;; Line 2
+;; Line 3
+;; Line 4
+;; Line 5
+;; Line 6
+;; "
+;;        "Line 2
+;; Line 3
+;; This is a test
+;; Line 4
+;; Line 5
+;; Line 6
+;; "
+;;        (goto-char 0)
+;;        (forward-line 2)
+;;        (forward-char 2)
+;;        (activate-mark)
+;;        (forward-line)
+;;        (end-of-line)
+;;        (backward-char 2)
+;;        (message "Test Region: string \"%s\"" (buffer-substring-no-properties (region-beginning) (region-end)))
+;;        (move-text-up))))
+     )
+  )
 
 
 

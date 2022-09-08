@@ -65,17 +65,15 @@ Note: `region-beginning' and `region-end' are the reason why an
 
 \"The mark is not set now, so there is no region\"
 
-So the predicate `region-active-p' is needed to avoid calling
-them when there's no region."
-    ;; `(,@(if (region-active-p)
-    ;;         (list (region-beginning) (region-end))
-    ;;       (list nil nil))
-    ;;   ,current-prefix-arg))
+We check `mark-active' to avoid calling
+them when there's no region.
+We use `prefix-numeric-value' to always return a number and simplify the functions
+"
     (list
-     (if mark-active (region-beginning) nil)
-     (if mark-active (region-end) nil)
-     (prefix-numeric-value current-prefix-arg)
-     ))
+     (when mark-active (region-beginning)) ;; otherwise nil
+     (when mark-active (region-end))
+     (prefix-numeric-value current-prefix-arg)))
+
 ;;;###autoload
 (defun move-text--total-lines ()
   "Convenience function to get the total lines in the buffer / or narrowed buffer."
@@ -113,7 +111,7 @@ them when there's no region."
 ;;;###autoload
 (defun move-text-line-up ()
   "Move the current line up."
-  ;; (interactive)
+  (interactive)
     (if (move-text--at-last-line-p)
         (let ((target-point))
           (kill-whole-line)
@@ -132,7 +130,7 @@ them when there's no region."
 ;;;###autoload
 (defun move-text-line-down ()
   "Move the current line down."
-  ;; (interactive)
+  (interactive)
   (unless (or
            (move-text--at-last-line-p)
            (and
@@ -147,7 +145,7 @@ them when there's no region."
 ;;;###autoload
 (defun move-text-region (start end n)
   "Move the current region (START END) up or down by N lines."
-  ;; (interactive (move-text-get-region-and-prefix))
+  (interactive (move-text-get-region-and-prefix))
   (let ((line-text (delete-and-extract-region start end)))
     (forward-line n)
     (let ((start (point)))
@@ -186,9 +184,7 @@ them when there's no region."
 
 ;;;###autoload
 (defun move-text-default-bindings ()
-  "Use default bindings for move-text-up and move-text-down (M-up / M-down).
-
-Bind `move-text-up' and `move-text-down' to M-up & M-down."
+  "Bind `move-text-up' and `move-text-down' to M-up & M-down."
   (interactive)
   (global-set-key [M-down] 'move-text-down)
   (global-set-key [M-up]   'move-text-up))

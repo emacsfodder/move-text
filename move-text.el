@@ -159,7 +159,7 @@ them when there's no region."
 (defun move-text-region-up (start end n)
   "Move the current region (START END) up by N lines."
   (interactive (move-text-get-region-and-prefix))
-  (move-text-region start end -n))
+  (move-text-region start end (- n)))
 
 ;;;###autoload
 (defun move-text-region-down (start end n)

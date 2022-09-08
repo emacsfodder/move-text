@@ -70,7 +70,7 @@ them when there's no region.
 We use `prefix-numeric-value' to always return a number and simplify the functions
 "
     (list
-     (when mark-active (region-beginning))
+     (when mark-active (region-beginning)) ;; otherwise nil
      (when mark-active (region-end))
      (prefix-numeric-value current-prefix-arg)
      ))

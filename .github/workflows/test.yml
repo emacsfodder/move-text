@@ -2,8 +2,6 @@ name: Move-Text CI Tests
 
 on:
   push:
-    branches: 
-      - master
   pull_request:
 
 jobs:

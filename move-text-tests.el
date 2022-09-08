@@ -21,7 +21,7 @@
 
 (let ((transient-mark-mode t))
 
-  (ert-deftest move-text-down-test ()
+  (ert-deftest move-line-down-test ()
     "Move text down by (1) one line, (2) by region."
     (should-on-temp-buffer
         "This is a test
@@ -33,36 +33,47 @@ This is a test
 Line 3
 "
       (call-interactively #'move-text-down))
+    (should-on-temp-buffer
+        "This is a test
+Line 2
+Line 3
+Line 4
+"
+        "This is a test
+Line 3
+Line 2
+Line 4
+"
+        (forward-line)
+        (call-interactively #'move-text-down))
+    )
 
-;;     (should-on-temp-buffer
-;;         "This is a test
-;; Line 2
-;; Line 3
-;; Line 4
-;; Line 5
-;; Line 6
-;; "
-;;         "This is a test
-;; Line 2
-;; Line 4
-;; Line 3
-;; Line 5
-;; Line 6
-;; "
-;;       ;; (set-mark 16)
-;;       ;; (goto-char 27)
-;;       ;; (activate-mark)
-;;         (let ((beg 16)
-;;               (end 27))
-;;           (goto-char 0)
-;;           (forward-line 3)
-;;           (setq beg (point))
-;;           (forward-line 1)
-;;           (setq end (point))
-;;           (move-text-region-down beg end 1)
-;;           (message (buffer-string)))
-
-;;         )
+  (ert-deftest move-region-down-test ()
+    (should-on-temp-buffer
+        "This is a test
+Line 2
+Line 3
+Line 4
+Line 5
+Line 6
+"
+        "This is a test
+Line 2
+Line 5
+Line 3
+Line 4
+Line 6
+"
+        (let (reg-beg reg-end)
+          (forward-line 2)
+          (setq reg-beg (point))
+          (activate-mark)
+          (forward-line 2)
+          (setq reg-end (point))
+          ;; TODO: (call-interactively #'move-text-down t (vector reg-beg reg-end 1))
+          (move-text-region-down reg-beg reg-end 1)
+          )
+        )
     )
 
   (ert-deftest move-text-up-test ()
@@ -76,33 +87,34 @@ Line 3
 Line 3
 Line 2
 "
-     (goto-char 24)
-     (call-interactively #'move-text-up))
+     (forward-line 2)
+     (call-interactively #'move-text-up)))
 
-;;      (should-on-temp-buffer
-;;          "This is a test
-;; Line 2
-;; Line 3
-;; Line 4
-;; Line 5
-;; Line 6
-;; "
-;;        "Line 2
-;; Line 3
-;; This is a test
-;; Line 4
-;; Line 5
-;; Line 6
-;; "
-;;        (goto-char 0)
-;;        (forward-line 2)
-;;        (forward-char 2)
-;;        (activate-mark)
-;;        (forward-line)
-;;        (end-of-line)
-;;        (backward-char 2)
-;;        (message "Test Region: string \"%s\"" (buffer-substring-no-properties (region-beginning) (region-end)))
-;;        (move-text-up))))
+  (ert-deftest move-region-up-test ()
+     (should-on-temp-buffer
+         "This is a test
+Line 2
+Line 3
+Line 4
+Line 5
+Line 6
+"
+       "Line 2
+Line 3
+This is a test
+Line 4
+Line 5
+Line 6
+"
+       (let (reg-beg reg-end)
+         (forward-line)
+         (setq reg-beg (point))
+         (activate-mark)
+         (forward-line 2)
+         (setq reg-end (point))
+         (move-text-region-up reg-beg reg-end 1)
+         )
+       )
      )
   )
 

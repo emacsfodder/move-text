@@ -12,7 +12,8 @@
   (declare (indent 1) (debug t))
   `(should (string= ,expect-string
                     (with-temp-buffer
-                      ;; (erase-buffer)
+                    ;; (with-current-buffer-window "*ERT-should-temp-buffer*"
+                    ;;   (erase-buffer)
                       (insert ,input-string)
                       (goto-char (point-min))
                       ,@body
@@ -32,38 +33,37 @@ This is a test
 Line 3
 "
       (goto-char 0)
-      ;; (move-text-down 1 nil nil))
-      (move-text-line-down))
+      (call-interactively #'move-text-down))
 
-    (should-on-temp-buffer
-        "This is a test
-Line 2
-Line 3
-Line 4
-Line 5
-Line 6
-"
-        "This is a test
-Line 2
-Line 4
-Line 3
-Line 5
-Line 6
-"
-      ;; (set-mark 16)
-      ;; (goto-char 27)
-      ;; (activate-mark)
-        (let ((beg 16)
-              (end 27))
-          (goto-char 0)
-          (forward-line 3)
-          (setq beg (point))
-          (forward-line 1)
-          (setq end (point))
-          (move-text-region-down beg end 1)
-          (message (buffer-string)))
+;;     (should-on-temp-buffer
+;;         "This is a test
+;; Line 2
+;; Line 3
+;; Line 4
+;; Line 5
+;; Line 6
+;; "
+;;         "This is a test
+;; Line 2
+;; Line 4
+;; Line 3
+;; Line 5
+;; Line 6
+;; "
+;;       ;; (set-mark 16)
+;;       ;; (goto-char 27)
+;;       ;; (activate-mark)
+;;         (let ((beg 16)
+;;               (end 27))
+;;           (goto-char 0)
+;;           (forward-line 3)
+;;           (setq beg (point))
+;;           (forward-line 1)
+;;           (setq end (point))
+;;           (move-text-region-down beg end 1)
+;;           (message (buffer-string)))
 
-        )
+;;         )
     )
 
   (ert-deftest move-text-up-test ()

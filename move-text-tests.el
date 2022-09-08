@@ -32,21 +32,8 @@ Line 3
 This is a test
 Line 3
 "
-      (call-interactively #'move-text-down))
-    (should-on-temp-buffer
-        "This is a test
-Line 2
-Line 3
-Line 4
-"
-        "This is a test
-Line 3
-Line 2
-Line 4
-"
-        (forward-line)
-        (call-interactively #'move-text-down))
-    )
+      (goto-char 0)
+      (call-interactively #'move-text-down)))
 
   (ert-deftest move-region-down-test ()
     (should-on-temp-buffer
@@ -59,22 +46,17 @@ Line 6
 "
         "This is a test
 Line 2
-Line 5
-Line 3
 Line 4
+Line 3
+Line 5
 Line 6
 "
-        (let (reg-beg reg-end)
-          (forward-line 2)
-          (setq reg-beg (point))
-          (activate-mark)
-          (forward-line 2)
-          (setq reg-end (point))
-          ;; TODO: (call-interactively #'move-text-down t (vector reg-beg reg-end 1))
-          (move-text-region-down reg-beg reg-end 1)
-          )
-        )
-    )
+        (forward-line 2)
+        (push-mark)
+        (activate-mark)
+        (forward-line)
+        (message "Mark at %d - Point at %d" (mark) (point))
+        (move-text-down (mark) (point) 1)))
 
   (ert-deftest move-line-up-test ()
      "Move text up by (1) one line, (2) by region."
@@ -106,17 +88,15 @@ Line 4
 Line 5
 Line 6
 "
-       (let (reg-beg reg-end)
-         (forward-line)
-         (setq reg-beg (point))
-         (activate-mark)
-         (forward-line 2)
-         (setq reg-end (point))
-         (move-text-region-up reg-beg reg-end 1))
-       )
-     )
-  )
-
-
+       (goto-char 0)
+       (forward-line)
+       ;; (forward-char 2)
+       (push-mark)
+       (activate-mark)
+       (forward-line 2)
+       ;; (end-of-line)
+       ;; (backward-char 2)
+       ;; (message "Test Region: string \"%s\"" (buffer-substring-no-properties (region-beginning) (region-end)))
+       (move-text-up (mark) (point) 1))))
 
 ;;; move-text-tests.el ends here

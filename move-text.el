@@ -6,7 +6,7 @@
 ;; Keywords: edit
 ;; Url: https://github.com/emacsfodder/move-text
 ;; Compatibility: GNU Emacs 25.1
-;; Version: 2.0.8
+;; Version: 2.0.9
 ;;
 ;;; This file is NOT part of GNU Emacs
 
@@ -65,12 +65,14 @@ Note: `region-beginning' and `region-end' are the reason why an
 
 \"The mark is not set now, so there is no region\"
 
-So the predicate `region-active-p' is needed to avoid calling
-them when there's no region."
-    `(,@(if (region-active-p)
-            (list (region-beginning) (region-end))
-          (list nil nil))
-      ,current-prefix-arg))
+We check `mark-active' to avoid calling
+them when there's no region.
+We use `prefix-numeric-value' to always return a number and simplify the functions
+"
+    (list
+     (when mark-active (region-beginning)) ;; otherwise nil
+     (when mark-active (region-end))
+     (prefix-numeric-value current-prefix-arg)))
 
 ;;;###autoload
 (defun move-text--total-lines ()
@@ -155,38 +157,35 @@ them when there's no region."
 (defun move-text-region-up (start end n)
   "Move the current region (START END) up by N lines."
   (interactive (move-text-get-region-and-prefix))
-  (move-text-region start end (if (null n) -1 (- n))))
+  (move-text-region start end (- n)))
 
 ;;;###autoload
 (defun move-text-region-down (start end n)
   "Move the current region (START END) down by N lines."
   (interactive (move-text-get-region-and-prefix))
-  (move-text-region start end (if (null n) 1 n)))
+  (move-text-region start end n))
 
 ;;;###autoload
-(defun move-text-up (&optional start end n)
+(defun move-text-up (start end n)
   "Move the line or region (START END) up by N lines."
   (interactive (move-text-get-region-and-prefix))
   (if (not (move-text--at-first-line-p))
     (if (region-active-p)
         (move-text-region-up start end n)
-      (if n (cl-loop repeat n do (move-text-line-up))
-        (move-text-line-up)))))
+      (cl-loop repeat n do (move-text-line-up)))))
 
 ;;;###autoload
-(defun move-text-down (&optional start end n)
+(defun move-text-down (start end n)
   "Move the line or region (START END) down by N lines."
   (interactive (move-text-get-region-and-prefix))
   (if (region-active-p)
       (move-text-region-down start end n)
-    (if n (cl-loop repeat n do (move-text-line-down))
-      (move-text-line-down))))
+    (cl-loop repeat n do (move-text-line-down))))
 
 ;;;###autoload
 (defun move-text-default-bindings ()
-  "Use default bindings for move-text-up and move-text-down (M-up / M-down)."
-  (interactive)
   "Bind `move-text-up' and `move-text-down' to M-up & M-down."
+  (interactive)
   (global-set-key [M-down] 'move-text-down)
   (global-set-key [M-up]   'move-text-up))
 

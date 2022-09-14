@@ -6,7 +6,7 @@
 ;; Keywords: edit
 ;; Url: https://github.com/emacsfodder/move-text
 ;; Compatibility: GNU Emacs 25.1
-;; Version: 2.0.9
+;; Version: 2.0.10
 ;;
 ;;; This file is NOT part of GNU Emacs
 

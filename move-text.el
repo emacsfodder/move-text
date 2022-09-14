@@ -56,6 +56,7 @@
 ;;
 
 ;;; Code:
+(require 'cl-lib)
 
 (defun move-text-get-region-and-prefix ()
     "Get the region and prefix for the `interactive' macro, without aborting.

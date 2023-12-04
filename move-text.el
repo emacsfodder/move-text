@@ -1,4 +1,4 @@
-;;; move-text.el --- Move current line or region with M-up or M-down.
+;;; move-text.el --- Move current line or region with M-up or M-down. -*- lexical-binding: t; -*-
 
 ;; filename: move-text.el
 ;; Description: Move current line or region with M-up or M-down.

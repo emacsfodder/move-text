@@ -58,6 +58,10 @@
 ;;; Code:
 (require 'cl-lib)
 
+(declare-function evil-visual-state-p "evil-states")
+(declare-function evil-visual-select "evil-states")
+(declare-function evil-visual-type "evil-states")
+
 (defun move-text-get-region-and-prefix ()
     "Get the region and prefix for the `interactive' macro, without aborting.
 

@@ -175,7 +175,11 @@ We use `prefix-numeric-value' to return a number.
   (if (not (move-text--at-first-line-p))
     (if (region-active-p)
         (move-text-region-up start end n)
-      (cl-loop repeat n do (move-text-line-up)))))
+      (cl-loop repeat n do (move-text-line-up))))
+  (when (and (fboundp 'evil-visual-state-p)
+             (evil-visual-state-p))
+    (setq deactivate-mark nil)
+    (evil-visual-select (region-beginning) (region-end) (evil-visual-type))))
 
 ;;;###autoload
 (defun move-text-down (start end n)
@@ -183,7 +187,11 @@ We use `prefix-numeric-value' to return a number.
   (interactive (move-text-get-region-and-prefix))
   (if (region-active-p)
       (move-text-region-down start end n)
-    (cl-loop repeat n do (move-text-line-down))))
+    (cl-loop repeat n do (move-text-line-down)))
+  (when (and (fboundp 'evil-visual-state-p)
+             (evil-visual-state-p))
+    (setq deactivate-mark nil)
+    (evil-visual-select (region-beginning) (region-end) (evil-visual-type))))
 
 ;;;###autoload
 (defun move-text-default-bindings ()
